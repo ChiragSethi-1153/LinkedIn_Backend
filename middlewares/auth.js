@@ -6,9 +6,8 @@ exports.verifyToken = (req, res, next) => {
 
     const headers = req.headers[`authorization`]
     const token = headers.split(" ")[1]
-    
     // console.log(headers)
-
+    
     if(!token) {
         res.status(404).json({message: "No token Found"})
     }

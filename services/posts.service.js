@@ -46,3 +46,12 @@ exports.updatePost = async (req) => {
     }
 }
 
+exports.deletePosts = async (req) => {
+    const {id} = req.params
+    try{
+        const deleted = await Posts.findByIdAndDelete(id)
+        return deleted
+    }catch(err){
+        console.log(err)
+    }
+}

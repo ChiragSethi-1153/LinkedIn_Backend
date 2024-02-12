@@ -34,3 +34,14 @@ exports.updatePost = async (req, res) => {
         return res.status(400).send(err)
     }
 }
+
+exports.deletePosts = async (req, res) => {
+    try{
+        const response = await postsService.deletePosts(req)
+        return res.status(202).json(response)
+    }
+    catch(err){
+        console.log(err)
+        return res.status(400).json(err)
+    }
+}
