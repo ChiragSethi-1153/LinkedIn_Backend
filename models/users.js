@@ -7,13 +7,13 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        unique: true,
+        // unique: true,
         required: true
     },
     password: {
         type: String,
         required: true,
-        minlenght: 8
+        // minlenght: 8
     },
     address: {
         type: Object,

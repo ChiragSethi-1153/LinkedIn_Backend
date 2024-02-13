@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const express = require('express')
 const cors = require('cors')
 const multer = require('multer')
@@ -12,9 +13,7 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", require('./routes'))
-
-
-
+app.use('/uploads',express.static(path.join(__dirname, 'uploads')))
 
 app.listen(process.env.PORT, () => {
     console.log("server connected 8080")

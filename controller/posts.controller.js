@@ -12,6 +12,15 @@ exports.createPosts = async (req, res) => {
     }
 }
 
+exports.getAllPosts = async (req, res) => {
+    try{
+        const response  = await postsService.getAllPost();
+        return res.status(200).json(response)
+    }catch(err){
+        console.log(err)
+        return res.status(404).send(err)
+    }
+}
 
 
 exports.getPost = async (req, res) => {

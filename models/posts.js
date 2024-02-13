@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
+const Users = require('./users')
 const {ObjectId } = require('mongodb')
 
 const postSchema = new mongoose.Schema({
     userId: {
-        type: ObjectId,
-        ref:"users"
-        // required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Users,
+        // require: [true]
+
     },
     title: {
         type: String,
@@ -15,10 +17,18 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    createdOn: {
+        type: Date,
+        default: Date.now,
+    },
     images: {
         type: [String],
         default:null
-    }
+    },
+    // reactionId: {
+    //     type: [mongoose.Schema.Types.ObjectId],
+    //     ref: Reactions
+    // }
 })
 
 exports.Posts = mongoose.model('posts', postSchema)
