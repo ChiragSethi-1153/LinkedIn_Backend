@@ -28,3 +28,41 @@ exports.getReactions = async () => {
         
     }
 }
+
+exports.updateReaction = async (req) => {
+    const {reactionId} = req.params
+    const {userId, emoji} = req.body
+    const currentUserId = await Reactions.findById(reactionId)
+
+    try{
+        if(userId == currentUserId.userId ){
+            const edit = await Reactions.findByIdAndUpdate(reactionId, {emoji}, {new: true})
+            return edit
+        }   
+        else {
+            return "Unauthorized User"
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.removeReaction = async (req) => {
+    const {reactionId} = req.params
+    const {userId} = req.body
+    const currentUserId = await Reactions.findById(reactionId)
+
+    try{
+        if(userId == currentUserId.userId ){
+            const edit = await Reactions.findByIdAndDelete(reactionId)
+            return edit
+        }   
+        else {
+            return "Unauthorized User"
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}

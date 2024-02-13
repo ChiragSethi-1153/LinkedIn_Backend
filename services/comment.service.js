@@ -48,3 +48,22 @@ exports.editComments = async (req) => {
         console.log(err)
     }
 }
+
+exports.deleteComment = async (req) => {
+    const {commentId} = req.params
+    const {userId} = req.body
+    const currentUserId = await Comments.findById(commentId)
+
+    try{
+        if(userId == currentUserId.userId ){
+            const del = await Comments.findByIdAndDelete(commentId)
+            return del
+        }   
+        else {
+            return "Unauthorized User"
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
