@@ -8,7 +8,7 @@ exports.signup = async (req, res) => {
     try{
         const response = await userService.signup(req);
         if(response == 'User already exists! Login instead'){
-            return res.status(400).json(response)
+            return res.status(409).json(response)
         }
         else{
             return res.status(201).json(response)

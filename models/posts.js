@@ -7,7 +7,6 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: Users,
         // require: [true]
-
     },
     title: {
         type: String,
@@ -23,12 +22,8 @@ const postSchema = new mongoose.Schema({
     },
     images: {
         type: [String],
-        default:null
-    },
-    // reactionId: {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     ref: Reactions
-    // }
+        default: null
+    }
 })
 
 exports.Posts = mongoose.model('posts', postSchema)

@@ -12,9 +12,9 @@ paths:
       tags:
         - Users
       summary: Create a new user
-      description: Creates a new user 
+      description: Creates a new user
       requestBody:
-        description: Request to create user
+        description: Request to create advisor
         content:
           application/json:
             schema:
@@ -26,9 +26,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdvisorSchema'
+                $ref: '#/components/schemas/UserSchema'
         '409':
-            description: Duplicate key error
+            description: Bad Request/User already exists
             content:
               application/json:
                 schema:
@@ -107,12 +107,12 @@ paths:
             type: string
             default: updateAt,desc
       responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AdvisorsResponse"
+        # "200":
+        #   description: Successful Operation
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: "#/components/schemas/AdvisorsResponse"
         "400":
           description: Invalid request payload
         "500":
@@ -146,7 +146,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AdvisorSchema"
+                $ref: "#/components/schemas/UserSchema"
         "400":
           description: Invalid request payload
           content:
@@ -244,13 +244,13 @@ paths:
             format: uuid
       summary: Edit the advisor
       description: Updates the advisor
-      requestBody:
-        description: Request to edit advisor
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EditAdvisorRequest'
-        required: true
+      # requestBody:
+      #   description: Request to edit advisor
+        # content:
+        #   application/json:
+        #     schema:
+        #       $ref: '#/components/schemas/EditAdvisorRequest'
+        # required: true
       responses:
         '200':
           description: Advisor updated successfully
@@ -364,12 +364,12 @@ paths:
       tags:
         - Roles
       responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RolesResponse"
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
         "204":
           description: No content found
           content:
@@ -393,238 +393,116 @@ components:
     UserSchema:
       type: object
       properties:
-        name: 
+        name:
           type: string
+          example: "name"
         email:
           type: string
           format: email
-        password: 
+        password:
           type: string
-        address: 
+        address:
           type: object
-          items: 
-            street: 
+          properties:
+            street:
               type: string
             suite:
-              type: String
-            city: 
-              type: String
+              type: string
+            city:
+              type: string
             zipcode: 
-              type: String
-            geo: 
-              type: Object,
-            #   lat:
-            #   type: Number
-            # lng:
-            #   type: Number
-        phone: 
+              type: string
+            geo:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        phone:
           type: string
-        profileImage: 
+        profileImage:
           type: string
         website:
           type: string
         company: 
           type: object
-          # name: 
-          #   type: string
-          # catchPhrase:
-          #   type: string
-          # bs:
-          #   type: string
+          properties:
+            name:
+              type: string
+            catchphrase:
+              type: string
+            bs:
+              type: string
+      required:
+        - name
+        - email
+        - password
 
-    AdvisorSchema:
+
+    postsSchema:
       type: object
       properties:
-        uuid:
+        userId:
           type: string
-          format: uuid
-        firstName:
+          example: 
+        title:
           type: string
-        lastName:
+          example: 
+        body:
           type: string
-        email:
-          type: string
-          format: email
-        status:
-          type: string
-          enum:
-            - active
-            - inactive
-          example: active
-        rolesUUIDs:
-          type: array
-          items:
-            type: string
-            format: uuid
-        instituteAbbreviations:
-          type: array
-          items:
-            type: string
-            example: FBR
-        locations:
-          type: array
-          items:
-            type: string
-        createdBy:
-          type: string
-        deletedBy:
-          type: string
-          format: uuid
-          example: null
         createdAt:
           type: string
           format: date-time
-          description: Creation date and time
-          example: "2023-07-25T08:30:00Z"
-        updatedAt:
-          type: string
-          format: date-time
-          description: Updation date and time
-          example: "2023-07-25T08:30:00Z"
-        deletedAt:
-          type: string
-          format: date-time
-          description: Deletion date and time
-          example: null
-    AdvisorsResponse:
-      type: object
-      properties:
-        total:
-          type: number
-          example: 4
-        count:
-          type: number
-          example: 4
-        current_page:
-          type: number
-          example: 1
-        per_page:
-          type: number
-          example: 10
-        data:
+          example:  2024-02-14T07:21:42.394+00:00
+        images:
           type: array
           items: 
-            type: object
-            $ref: '#/components/schemas/AdvisorSchema'
+            type: string
+      required:
+        - body
+        - title
       
-    AdvisorRequest:
+    commentSchema:
       type: object
       properties:
-        firstName:
+        userId:
           type: string
-        lastName:
+        postId:
           type: string
-        email:
+        body:
           type: string
           format: email
-        status:
+        createdAt:
           type: string
-          enum:
-             - active
-             - inactive
-        rolesUUIDs:
-          type: array
-          items:
-            type: string
-            format: uuid
-        instituteAbbreviations:
-          type: array
-          items:
-            type: string
-            example: FBR
-        locations:
-          type: array
-          items:
-            type: string
+          format: date-time
+          example: 2024-02-14T07:21:42.394+00:00
       required:
-        - firstName
-        - email
-    EditAdvisorRequest:
+        - body
+
+      
+    ReactionSchema:
       type: object
       properties:
-        firstName:
+        userId:
           type: string
-        lastName:
+        postId:
           type: string
-        email:
+        commentId:
           type: string
-          format: email
-        status:
+        emoji:
           type: string
           enum:
-             - active
-             - inactive
-        rolesUUIDs:
-          type: array
-          items:
-            type: string
-            format: uuid
-        instituteAbbreviations:
-          type: array
-          items:
-            type: string
-            example:
-              - FBR
-              - UEA
-              - UNIB
-        locations:
-          type: array
-          items:
-            type: string
-      required:
-        - firstName
-        - email
-    RolesSchema:
-      type: object
-      properties:
-        uuid:
+             - Like
+             - Celebrate
+             - Support
+             - Love
+             - Insightful
+             - Funny 
+        createdAt:
           type: string
-          format: uuid
-        name:
-          type: object
-          properties:
-            es_ES:
-              type: string
-              example: "Secretario Académico"
-            en_US:
-              type: string
-              example: "Academic Secretary"
-            pt_PT:
-              type: string
-              example: "Secretariado Académico"
-            pt_BR:
-              type: string
-              example: "Secretariado Académico"
-        abbreviation:
-          type: string
-          example: "SA"
-        description:
-          type: object
-          properties:
-             es_ES:
-               type: string
-               example: "Responsable de expedientes académicos"
-             en_US:
-               type: string
-               example: "Responsible for academic records"
-             pt_PT:
-               type: string
-               example: "Gestor de registos académicos"
-             pt_BR:
-               type: string
-               example: "Gestor de registos académicos"
-        status:
-          type: string
-          default: active
-          enum:
-            - active
-            - inactive
-    RolesResponse:
-      type: object
-      properties:
-        roles:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/RolesSchema'
+          format: date-time
+          example: 2024-02-14T07:21:42.394+00:00
+
+
             
