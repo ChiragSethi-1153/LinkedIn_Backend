@@ -1,0 +1,630 @@
+openapi: "3.0.3"
+info:
+  title: LinkedIn Clone
+
+  version: "1.0.0"
+  # description:
+servers:
+  - url: http://localhost:8080
+paths:
+  /signup:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: Creates a new user 
+      requestBody:
+        description: Request to create user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSchema'
+        required: true
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdvisorSchema'
+        '409':
+            description: Duplicate key error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: The provided email already exists
+        '404':
+          description: 'Not Found: This response is shown if the request for information is not there or it could not be imported'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    get:
+      summary: Get a list of advisors
+      description: Returns an array containing all the advisors
+      operationId: getAdvisors
+      tags:
+        - Advisors
+      parameters:
+        - name: "name"
+          in: query
+          example: Jhon Doe
+          description: "Advisor name"
+          schema:
+            type: string
+        - name: "status"
+          in: query
+          description: "Advisor's status"
+          example: active
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+        - name: "archive"
+          in: query
+          description: "Show and hide deleted advisors"
+          example: true
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: institute
+          in: query
+          description: Assigned institute of advisor
+          example: FBR,UEA
+          schema:
+            type: string 
+        - name: "limit"
+          in: "query"
+          description: Limit the results provided to this value. 10 is the default value, 50 is the maximum per page.
+          example: 10
+          schema:
+            type: integer
+            default: 10
+        - name: "page"
+          in: "query"
+          description: Paginating by page, 10 items(limit) per page (10 results, page 2)
+          example: 1
+          schema:
+            type: integer
+            default: 1
+        - name: "order"
+          in: query
+          description: Columns sort by ascending and descending orders
+          example: name,desc
+          schema:
+            type: string
+            default: updateAt,desc
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdvisorsResponse"
+        "400":
+          description: Invalid request payload
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /advisors/{advisorId}:
+    get:
+      summary: Get a advisor 's complete information
+      description: Returns a advisor's complete information
+      operationId: getAdvisorById
+      tags:
+        - Advisors
+      parameters:
+        - name: 'advisorId'
+          in: path
+          required: true
+          description: The UUID of advisor
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdvisorSchema"
+        "400":
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The provided advisorId is not valid, 1234
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Advisor not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    patch:
+      tags:
+        - Advisors
+      parameters:
+        - name: 'advisorId'
+          in: path
+          required: true
+          description: The UUID of advisor
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          schema:
+            type: string
+            format: uuid
+      summary: Restore deleted advisor
+      description: Restores the advisor and set the status to active. Returns a message after restoring the advisor
+      responses:
+        '200':
+          description: Advisor restored successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Advisor restored successfully.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Advisor not found
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The provided advisorId is not valid, 1234
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      tags:
+        - Advisors
+      parameters:
+        - name: 'advisorId'
+          in: path
+          required: true
+          description: The UUID of advisor
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          schema:
+            type: string
+            format: uuid
+      summary: Edit the advisor
+      description: Updates the advisor
+      requestBody:
+        description: Request to edit advisor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditAdvisorRequest'
+        required: true
+      responses:
+        '200':
+          description: Advisor updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Advisor edited successfully.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Advisor not found
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The provided advisorId is not valid, 1234 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      tags:
+        - Advisors
+      parameters:
+        - name: 'advisorId'
+          in: path
+          required: true
+          description: The UUID of advisor
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          schema:
+            type: string
+            format: uuid
+      summary: Delete the advisor
+      description: Deletes the advisor and set the status to inactive. Returns a message after deleting the advisor
+      requestBody:
+        description: Request to delete advisor
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deletedBy:
+                  type: string
+                  example: user@zenmonk.tech    
+        required: true
+      responses:
+        '200':
+          description: Advisor deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Advisor deleted successfully.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Advisor not found
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The provided advisorId is not valid, 1234
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /roles:
+    get:
+      summary: Get a list of roles
+      description: Returns an array containing all the roles
+      operationId: getRoles
+      tags:
+        - Roles
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    UserSchema:
+      type: object
+      properties:
+        name: 
+          type: string
+        email:
+          type: string
+          format: email
+        password: 
+          type: string
+        address: 
+          type: object
+          items: 
+            street: 
+              type: string
+            suite:
+              type: String
+            city: 
+              type: String
+            zipcode: 
+              type: String
+            geo: 
+              type: Object,
+            #   lat:
+            #   type: Number
+            # lng:
+            #   type: Number
+        phone: 
+          type: string
+        profileImage: 
+          type: string
+        website:
+          type: string
+        company: 
+          type: object
+          # name: 
+          #   type: string
+          # catchPhrase:
+          #   type: string
+          # bs:
+          #   type: string
+
+    AdvisorSchema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+        rolesUUIDs:
+          type: array
+          items:
+            type: string
+            format: uuid
+        instituteAbbreviations:
+          type: array
+          items:
+            type: string
+            example: FBR
+        locations:
+          type: array
+          items:
+            type: string
+        createdBy:
+          type: string
+        deletedBy:
+          type: string
+          format: uuid
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date and time
+          example: "2023-07-25T08:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Updation date and time
+          example: "2023-07-25T08:30:00Z"
+        deletedAt:
+          type: string
+          format: date-time
+          description: Deletion date and time
+          example: null
+    AdvisorsResponse:
+      type: object
+      properties:
+        total:
+          type: number
+          example: 4
+        count:
+          type: number
+          example: 4
+        current_page:
+          type: number
+          example: 1
+        per_page:
+          type: number
+          example: 10
+        data:
+          type: array
+          items: 
+            type: object
+            $ref: '#/components/schemas/AdvisorSchema'
+      
+    AdvisorRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        status:
+          type: string
+          enum:
+             - active
+             - inactive
+        rolesUUIDs:
+          type: array
+          items:
+            type: string
+            format: uuid
+        instituteAbbreviations:
+          type: array
+          items:
+            type: string
+            example: FBR
+        locations:
+          type: array
+          items:
+            type: string
+      required:
+        - firstName
+        - email
+    EditAdvisorRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        status:
+          type: string
+          enum:
+             - active
+             - inactive
+        rolesUUIDs:
+          type: array
+          items:
+            type: string
+            format: uuid
+        instituteAbbreviations:
+          type: array
+          items:
+            type: string
+            example:
+              - FBR
+              - UEA
+              - UNIB
+        locations:
+          type: array
+          items:
+            type: string
+      required:
+        - firstName
+        - email
+    RolesSchema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: object
+          properties:
+            es_ES:
+              type: string
+              example: "Secretario Académico"
+            en_US:
+              type: string
+              example: "Academic Secretary"
+            pt_PT:
+              type: string
+              example: "Secretariado Académico"
+            pt_BR:
+              type: string
+              example: "Secretariado Académico"
+        abbreviation:
+          type: string
+          example: "SA"
+        description:
+          type: object
+          properties:
+             es_ES:
+               type: string
+               example: "Responsable de expedientes académicos"
+             en_US:
+               type: string
+               example: "Responsible for academic records"
+             pt_PT:
+               type: string
+               example: "Gestor de registos académicos"
+             pt_BR:
+               type: string
+               example: "Gestor de registos académicos"
+        status:
+          type: string
+          default: active
+          enum:
+            - active
+            - inactive
+    RolesResponse:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/RolesSchema'
+            

@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         suite: {
             type: String
         },
-        city:{
+        city:{ 
             type: String
         },
         zipcode: {
@@ -44,6 +44,21 @@ const userSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String
+    },
+    website:{
+        type: String
+    },
+    company: {
+        type: Object,
+      name: {
+        type: String
+      } ,
+      catchPhrase: {
+        type: String
+      },
+      bs:{
+        type: String
+      }
     }
 
 })

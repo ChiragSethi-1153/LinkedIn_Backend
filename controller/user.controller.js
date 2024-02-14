@@ -8,14 +8,15 @@ exports.signup = async (req, res) => {
     try{
         const response = await userService.signup(req);
         if(response == 'User already exists! Login instead'){
-            return res.status(400).json({response})
+            return res.status(400).json(response)
         }
         else{
-            return res.status(201).json({message: response})
+            return res.status(201).json(response)
         }
     }
     catch(err) {
         console.log(err)
+        return res.status(500).send(err)
     }
 }
 
@@ -27,7 +28,7 @@ exports.login = async (req, res) => {
             return res.status(400).json({response})
         }
         else if(response == "Invalid Email / Password"){
-            return res.status(400).json({response})
+            return res.status(401).json({response})
         }
         else{
             const token = jwt.sign({id: response._id}, key, {
@@ -39,6 +40,7 @@ exports.login = async (req, res) => {
     }
     catch(err){
         console.log(err)
+        return res.status(500).send(err)
     }
 
 }
@@ -47,15 +49,31 @@ exports.login = async (req, res) => {
 
 exports.getUser = async (req,res) => {
     try{
-        const response = await userService.signup(req);
+        const response = await userService.getUser(req);
         if(response == 'User Not Found'){
-            return res.status(400).json({response})
+            return res.status(400).json(response)
         }
         else{
-            return res.status(201).json({response})
+            return res.status(201).json(response)
         }
     }
     catch(err) {
         console.log(err)
+        return res.status(500).send(err)
+    }
+}
+
+exports.editUser = async (req, res) => {
+    try{
+        const response = await userService.editUser(req)
+        if(response == 'User Not Found'){
+            return res.status(404).json({message: "Not Authorized", response})
+        }
+        else{
+            return res.status(201).json(response)
+        }
+    }catch(err){
+        console.log(err)
+        return res.status(500).send(err)
     }
 }

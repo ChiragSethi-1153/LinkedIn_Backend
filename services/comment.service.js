@@ -16,6 +16,7 @@ exports.postComment = async (req) => {
     }
     catch(err){
         console.log(err)
+        return err
     }
 }
 
@@ -26,6 +27,7 @@ exports.getAllComments = async (req) => {
     }catch(err)
     {
         console.log(err)
+        return err
     }
 }
 
@@ -46,6 +48,7 @@ exports.editComments = async (req) => {
     }
     catch(err){
         console.log(err)
+        return err
     }
 }
 
@@ -65,5 +68,6 @@ exports.deleteComment = async (req) => {
     }
     catch(err){
         console.log(err)
+        return err
     }
 }

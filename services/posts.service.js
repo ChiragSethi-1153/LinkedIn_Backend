@@ -1,76 +1,97 @@
 const { Posts } = require("../models/posts")
-const multer = require('multer')
+const multer = require('multer');
+const { findById } = require("../models/users");
 // const path = require('path')
 
 exports.createPosts = async(req) => {
+    try{
     const {userId} = req.params;
     const { title, body} = req.body
     console.log(req.body)
-    const newImages = req.files.images.map((i) => {return i.path})
-    console.log(newImages)
-
+    let newImages
+    if(req.files.images != null){
+         newImages = req.files.images.map((i) => {return i.path})     
+        console.log(newImages)
+    }
     const post = new Posts({
         userId: userId,
         title,
         body,
         images: newImages
     })
-
-    try{
+  
         await post.save()
         return post
     }
     catch(err){
         console.log(err)
+        return err
     }
 } 
 
 exports.getAllPost = async () => {
 
     try{
-        const post = await Posts.find()
-        return post
+        const posts = await Posts.find().sort({createdAt: -1}).limit(10)
+        return posts
     }catch(err)
     {
         console.log(err)
+        return err
     }
 
 
 }
 
 exports.getPost = async (req) => {
-
-    const {id} = req.params 
     try{
-        const post = Posts.findOne({userId: id})
+    const {userId} = req.params 
+    
+        const post = Posts.find({userId: userId}).sort({createdAt: -1}).limit(10)
         return post
     }catch(err)
     {
         console.log(err)
+        return err
     }
-
-
 }
 
 exports.updatePost = async (req) => {
-    const {id} = req.params
-    const { body, title } = req.body;
-    // console.log(req.body)
     try{
-        const updated = await Posts.findByIdAndUpdate(id, {title, body}, {new: true})
-        console.log(updated)
-        return updated;
+    const {postId} = req.params
+    const { userId, body, title } = req.body;
+    // console.log(req.body)
+        const currentUserId = await Posts.findById(postId)
+        if(currentUserId.userId == userId){
+            const updated = await Posts.findByIdAndUpdate(postId, {title, body}, {new: true})
+            console.log(updated)
+            return updated;
+        }
+        else{
+            return "Not Authorized"
+        }
+        
     }catch(err){ 
         console.log(err)
+        return err
     }
 }
 
 exports.deletePosts = async (req) => {
-    const {id} = req.params
     try{
-        const deleted = await Posts.findByIdAndDelete(id)
+    const {postId} = req.params
+    const { userId } = req.body;
+    // console.log(req.body)
+        const currentUserId = await Posts.findById(postId)
+        if(currentUserId.userId == userId){
+        const deleted = await Posts.findByIdAndDelete(postId)
         return deleted
+        }
+        else{
+            return "Not Authorized"
+        }
     }catch(err){
         console.log(err)
+        return err
     }
 }

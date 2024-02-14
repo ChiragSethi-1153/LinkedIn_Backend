@@ -1,26 +1,48 @@
 const {reactionService} = require('../services')
 
-exports.saveReactions = async (req, res) => {
-    console.log("wcwe")
+exports.savePostReactions = async (req, res) => {
     try{
-        const response = await reactionService.saveReaction(req)
+        const response = await reactionService.savePostReaction(req)
         
         return res.status(201).json({response})
     }catch(err){
         console.log(err)
-        return res.status(400).send(err)
+        return res.status(500).send(err)
     }
 }
 
-exports.getReactions = async (req, res) => {
+exports.getPostReactions = async (req, res) => {
     try{
-        const response = await reactionService.getReactions()
+        const response = await reactionService.getPostReactions(req)
         return res.status(200).json(response)
     }catch(err){
         console.log(err)
-        return res.status(400).send(err)
+        return res.status(500).send(err)
     }
 }
+
+
+exports.saveCommentReactions = async (req, res) => {
+    try{
+        const response = await reactionService.saveCommentReaction(req)
+        
+        return res.status(201).json({response})
+    }catch(err){
+        console.log(err)
+        return res.status(500).send(err)
+    }
+}
+
+exports.getCommentReactions = async (req, res) => {
+    try{
+        const response = await reactionService.getCommentReactions()
+        return res.status(200).json(response)
+    }catch(err){
+        console.log(err)
+        return res.status(500).send(err)
+    }
+}
+
 
 exports.updateReaction = async (req, res) => {
     try{
@@ -29,7 +51,7 @@ exports.updateReaction = async (req, res) => {
     }
     catch(err){
         console.log(err)
-        return res.status(400).send(err)
+        return res.status(500).send(err)
     }
 }
 
@@ -39,6 +61,6 @@ exports.removeReaction = async (req, res) => {
         return res.status(202).json(response)
     }catch(err){
         console.log(err)
-        return res.status(400).send(err)
+        return res.status(500).send(err)
     }
 }

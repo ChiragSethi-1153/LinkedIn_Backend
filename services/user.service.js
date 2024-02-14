@@ -29,6 +29,7 @@ exports.signup = async (req) => {
     }
     catch(err) {
         console.log(err)
+        return err
     }
 
 }
@@ -54,12 +55,12 @@ exports.login = async (req, res) => {
 }
 
 exports.getUser = async (req) => {
-    const userId = req.id;
-    let user;
+   
     try{
-        user = await Users.findById(userId, "-password")
+        const userId = req.id;
+        const user = await Users.findById(userId, "-password")
         if(!user) {
-            return "User Not Found"
+            return "User Not Found" 
         }
         else{
             return user
@@ -68,4 +69,23 @@ exports.getUser = async (req) => {
         return new Error(err)
     }
     
+}
+
+exports.editUser = async (req) => {
+    try{
+        const {userId} = req.params
+        const {name, address, phone, website, company} = req.body
+        const currentUserId = await Users.findById(userId)
+        if(currentUserId == null){ 
+            return "User Not Found"
+        }
+        else {
+            const userDetails = await Users.findByIdAndUpdate(userId, {name, address, phone, website, company}, {new: true})
+            return userDetails
+        }
+
+    }catch(err){
+        console.log(err)
+        return err
+    }
 }
