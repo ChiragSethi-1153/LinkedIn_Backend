@@ -11,7 +11,7 @@ exports.verifyToken = (req, res, next) => {
     if(!token) {
         res.status(404).json({message: "No token Found"})
     }
-    jwt.verify(String(token),key, (err, user) => {
+    jwt.verify(token, key, (err, user) => {
         if(err) {
           return  res.status(400).json({message: "Invalid Token"})
         }

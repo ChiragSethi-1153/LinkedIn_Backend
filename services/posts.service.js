@@ -61,12 +61,12 @@ exports.updatePost = async (req) => {
     const {postId} = req.params
     const { userId, body, title } = req.body;
     // console.log(req.body)
-        const currentUserId = await Posts.findById(postId)
-        if(currentUserId.userId == userId){
-            const updated = await Posts.findByIdAndUpdate(postId, {title, body}, {new: true})
-            console.log(updated)
-            return updated;
-        }
+    const currentUserId = await Posts.findById(postId)
+    if(currentUserId.userId == userId){
+        const updated = await Posts.findByIdAndUpdate(postId, {title, body}, {new: true})
+        console.log(updated)
+        return updated;
+    }
         else{
             return "Not Authorized"
         }
