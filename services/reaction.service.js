@@ -69,7 +69,7 @@ exports.updateReaction = async (req) => {
     const currentUserId = await Reactions.findById(reactionId)
 
    
-        if(userId == currentUserId.userId ){
+        if(userId === currentUserId.userId ){
             const edit = await Reactions.findByIdAndUpdate(reactionId, {emoji}, {new: true})
             return edit
         }   
@@ -84,14 +84,14 @@ exports.updateReaction = async (req) => {
 }
 
 exports.removeReaction = async (req) => {
+    try{
     const {reactionId} = req.params
-    const {userId} = req.body
+    const {userId} = req.id
     const currentUserId = await Reactions.findById(reactionId)
 
-    try{
         if(userId == currentUserId.userId ){
-            const edit = await Reactions.findByIdAndDelete(reactionId)
-            return edit
+            const del = await Reactions.findByIdAndDelete(reactionId)
+            return del
         }   
         else {
             return "Unauthorized User"
@@ -101,4 +101,16 @@ exports.removeReaction = async (req) => {
         console.log(err)
         return err
     }
+}
+
+exports.deleteReactions = async (req) => {
+    try{
+        const {commentId} = req.params
+        const del = await Reactions.find({commentId: commentId})
+        return del 
+    }catch(err){
+        console.log(err)
+        return err
+    }
+
 }

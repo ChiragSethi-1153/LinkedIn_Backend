@@ -64,3 +64,13 @@ exports.removeReaction = async (req, res) => {
         return res.status(500).send(err)
     }
 }
+
+exports.deleteReactions = async (req, res) => {
+    try{
+        const response = await reactionService.deleteReactions(req)
+        return res.status(200).json(response)
+    }catch(err){
+        console.log(err)
+        return res.status(500).send(err)
+    }
+}

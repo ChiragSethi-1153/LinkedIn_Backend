@@ -1,4 +1,7 @@
 const {Comments} = require('../models/comments')
+const db = require('mongoose');
+const { Reactions } = require('../models/reactions');
+const { reactionService } = require('.');
 
 exports.postComment = async (req) => {
     const {postId} = req.params;
@@ -53,12 +56,18 @@ exports.editComments = async (req) => {
 }
 
 exports.deleteComment = async (req) => {
-    const {commentId} = req.params
-    const {userId} = req.body
-    const currentUserId = await Comments.findById(commentId)
-
+   
     try{
+    const session = await db.startSession();
+    session.startTransaction()
+    const {commentId} = req.params
+    const {userId} = req.id
+    const currentUserId = await Comments.findById(commentId)
+    
+    const delReaction = await Reactions.findByIdAndDelete[(commentId), {session: session}]
+    
         if(userId == currentUserId.userId ){
+            
             const del = await Comments.findByIdAndDelete(commentId)
             return del
         }   

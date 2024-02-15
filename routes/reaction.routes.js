@@ -10,5 +10,6 @@ router.get('/reaction/:commentId',verifyToken,  reactionController.getCommentRea
 
 router.put('/reaction/:reactionId', verifyToken, reactionController.updateReaction )
 router.delete('/reaction/:reactionId', verifyToken, reactionController.removeReaction)
+router.delete('/reactions/:commentId', reactionController.deleteReactions)
 
 module.exports = router
