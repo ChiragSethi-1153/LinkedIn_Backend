@@ -105,7 +105,7 @@ paths:
       tags:
         - Users
       summary: Getting user details
-      description: Getting user Details 
+      description: Getting user Details for loggedin user 
       responses:
         '200':
           description: User details found and returned successfully
