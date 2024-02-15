@@ -18,12 +18,8 @@ const commentSchema = new mongoose.Schema({
     body: {
         type: String,
         required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
     }
     
-})
+}, { timestamps: true })
 
 exports.Comments = mongoose.model('comments', commentSchema)

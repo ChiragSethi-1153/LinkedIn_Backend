@@ -7,11 +7,11 @@ exports.createPosts = async(req) => {
     try{
     const {userId} = req.id;
     const { title, body} = req.body
-    console.log(req.body)
+    // console.log(req.body)
     let newImages
-    if(req.files.images != null){
+    if(req.files.images !== null){
          newImages = req.files.images.map((i) => {return i.path})     
-        console.log(newImages)
+        // console.log(newImages)
     }
     const post = new Posts({
         userId: userId,
@@ -41,6 +41,7 @@ exports.getAllPost = async () => {
     }
 }
 
+// Need to be updated 
 exports.getPost = async (req) => {
     try{
     const {userId} = req.body
@@ -54,19 +55,21 @@ exports.getPost = async (req) => {
     }
 }
 
+// verification needed
 exports.updatePost = async (req) => {
     try{
+        const {userId} = req.id
     const {postId} = req.params
-    const { userId, body, title } = req.body;
+    const { body, title } = req.body;
     // console.log(req.body)
     const currentUserId = await Posts.findById(postId)
-    if(currentUserId.userId == userId){
+    if(currentUserId.userId === userId){
         const updated = await Posts.findByIdAndUpdate(postId, {title, body}, {new: true})
         console.log(updated)
         return updated;
     }
         else{
-            return "Not Authorized"
+            return 401
         }
         
     }catch(err){ 
@@ -78,7 +81,7 @@ exports.updatePost = async (req) => {
 exports.deletePosts = async (req) => {
     try{
     const {postId} = req.params
-    const { userId } = req.body;
+    const { userId } = req.id;
     // console.log(req.body)
         const currentUserId = await Posts.findById(postId)
         if(currentUserId.userId == userId){
@@ -86,7 +89,7 @@ exports.deletePosts = async (req) => {
         return deleted
         }
         else{
-            return "Not Authorized"
+            return 401
         }
     }catch(err){
         console.log(err)

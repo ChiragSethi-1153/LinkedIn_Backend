@@ -1,5 +1,17 @@
 require('dotenv').config()
 
+try{
+    if(process.env.PORT){
+        console.log("PORT is " + process.env.PORT)
+    }
+    else{ 
+        process.exit() 
+    }
+}
+catch(err){  
+    process.exit() 
+}
+
 const express = require('express')
 const cors = require('cors')
 const multer = require('multer')

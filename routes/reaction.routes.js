@@ -3,10 +3,10 @@ const {reactionController} = require('../controller')
 const { verifyToken } = require('../middlewares/auth')
 
 router.post('/reactions/:postId',verifyToken, reactionController.savePostReactions)
-router.get('/reaction/:postId',verifyToken, reactionController.getPostReactions)
+router.get('/reaction/:postId', reactionController.getPostReactions)
 
 router.post('/reactions/:commentId', verifyToken, reactionController.saveCommentReactions)
-router.get('/reaction/:commentId',verifyToken,  reactionController.getCommentReactions)
+router.get('/reaction/:commentId',  reactionController.getCommentReactions)
 
 router.put('/reaction/:reactionId', verifyToken, reactionController.updateReaction )
 router.delete('/reaction/:reactionId', verifyToken, reactionController.removeReaction)

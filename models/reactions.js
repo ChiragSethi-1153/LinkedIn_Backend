@@ -26,11 +26,7 @@ const reactionSchema = new mongoose.Schema({
         type: String,
         enum: ['Like','Celebrate', 'Support', 'Love', 'Insightful', 'Funny'],    
         // default:'Like'
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
-})
+}, { timestamps: true })
 
 exports.Reactions = mongoose.model('reactions', reactionSchema)

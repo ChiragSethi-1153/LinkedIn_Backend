@@ -3,16 +3,15 @@ const bcrypt = require('bcryptjs')
 
 
 exports.signup = async (req) => {
+    try{
     console.log(req.body)
     const {name, email, password} = req.body;
-    let existingUser;
-    try{
-        existingUser = await Users.findOne({email: email});
-    } catch (err) {
-        console.log(err)
-    }   
+   
+    
+    const existingUser = await Users.findOne({email: email});
+      
     if(existingUser){
-        return "User already exists! Login instead";
+        return 409;
     }
 
     const hashedPassword = bcrypt.hashSync(password)
@@ -23,7 +22,6 @@ exports.signup = async (req) => {
         password: hashedPassword
     });
 
-    try{
         await user.save();
         return user
     }
@@ -35,17 +33,16 @@ exports.signup = async (req) => {
 }
 
 exports.login = async (req, res) => {
-    const {email, password} = req.body
-
-    let existingUser;
     try{
-        existingUser  = await Users.findOne({email:email})
+    const {email, password} = req.body
+    
+      const existingUser  = await Users.findOne({email:email})
         if(!existingUser) {
-            return "User not found. Signup Please!"
+            return 204
         }
         const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
         if(!isPasswordCorrect) {
-            return "Invalid Email / Password"
+            return 400
         }
         return existingUser
     } catch(err){
@@ -60,7 +57,7 @@ exports.getUser = async (req) => {
         const userId = req.id;
         const user = await Users.findById(userId, "-password")
         if(!user) {
-            return "User Not Found" 
+            return 404
         }
         else{
             return user
@@ -73,11 +70,11 @@ exports.getUser = async (req) => {
 
 exports.editUser = async (req) => {
     try{
-        const {userId} = req.params
+        const {userId} = req.id
         const {name, address, phone, website, company} = req.body
         const currentUserId = await Users.findById(userId)
         if(currentUserId == null){ 
-            return "User Not Found"
+            return 404
         }
         else {
             const userDetails = await Users.findByIdAndUpdate(userId, {name, address, phone, website, company}, {new: true})

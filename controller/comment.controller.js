@@ -23,12 +23,14 @@ exports.getAllComments = async (req, res) => {
 
 exports.editComment = async (req, res) => {
     try{
+        const {userId} = req.id
         const response = await commentService.editComments(req)
-        if(response == "Unauthorized User"){
-            return res.status(400).json(response)
+        if(response === 401){
+            console.log(response)
+            return res.status(401).json({message: "not Authorized"})
         }
         else {
-            return res.status(201).json({message: 'Comment Edited Successfully', response})
+            return res.status(200).json({message: 'Comment Edited Successfully', response})
         }
 
     }catch(err){
@@ -40,8 +42,8 @@ exports.editComment = async (req, res) => {
 exports.deleteComment = async (req, res) => {
     try{
         const response = await commentService.deleteComment(req)
-        if(response == "Unauthorized User"){
-            return res.status(400).json(response)
+        if(response === 401){
+            return res.status(400).json({message: "Unauthorized User"})
         }
         else {
             return res.status(200).json({message: "deleted successfully", response})

@@ -5,7 +5,7 @@ exports.createPosts = async (req, res) => {
     try{
     const response = await postsService.createPosts(req)
     console.log(response)
-    return res.status(201).json({message: 'Post Created Successfully'})
+    return res.status(201).json({message: 'Post Created Successfully', response})
     }
     catch(err){
         console.log(err)
@@ -16,7 +16,7 @@ exports.createPosts = async (req, res) => {
 exports.getAllPosts = async (req, res) => {
     try{
         const response  = await postsService.getAllPost();
-        if(response == null ){
+        if(response === null ){
             return res.status(404).json({message: 'No Post Found', response})
         }else{
             return res.status(200).json({response})
@@ -32,7 +32,7 @@ exports.getAllPosts = async (req, res) => {
 exports.getPost = async (req, res) => {
     try{
         const response = await postsService.getPost(req)
-        if(response == null) {
+        if(response === null) {
             return res.status(204).json({message: 'No Post Found'})
         }
         else{
@@ -48,11 +48,11 @@ exports.getPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
     try{
         const response  = await postsService.updatePost(req)
-        if(response == null) {
+        if(response === null) {
             return res.status(404).json({message: 'No Post Found', response})
         }
-        else if(response == "Not Authorized"){
-            return res.status(401).json(response)
+        else if(response === 401){
+            return res.status(401).json({message: "Not Authorized"})
         }
         else{
             return res.status(201).json(response)
@@ -67,15 +67,14 @@ exports.updatePost = async (req, res) => {
 exports.deletePosts = async (req, res) => {
     try{
         const response = await postsService.deletePosts(req)
-        if(response == null) {
-            return res.status(404).json({message: 'No Post Found', response})
+        if(response === null) {
+            return res.status(404).json({message: 'No Post Found'})
         }
-        else if(response == "Not Authorized"){
-            return res.status(401).json(response)
+        if(response === 401){
+            return res.status(401).json({message: "Not Authorized"})
         }
-        else{
-            return res.status(200).json({message: "deleted Successfully", response})
-        }
+        return res.status(200).json({message: "deleted Successfully", response})
+        
     }
     catch(err){
         console.log(err)

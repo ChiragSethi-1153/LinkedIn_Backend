@@ -195,7 +195,7 @@ paths:
                   error:
                     type: string
 
-  /posts:
+  /post:
     post:
       summary: Creates post 
       description: Creates a new post for a user
@@ -273,10 +273,55 @@ paths:
                 properties:
                   error:
                     type: string
+    
+    put:
+     tags:
+      - Posts
+     responses:
+        '200':
+          description: Advisor deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Advisor deleted successfully.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Advisor not found
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The provided advisorId is not valid, 1234
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+       
 
     delete:
       tags:
-        - Advisors
+        - Posts
       parameters:
         - name: 'advisorId'
           in: path
@@ -339,13 +384,14 @@ paths:
                 properties:
                   error:
                     type: string
-  /roles:
+
+  /posts:
     get:
       summary: Get a list of roles
       description: Returns an array containing all the roles
       operationId: getRoles
       tags:
-        - Roles
+        - Posts
       responses:
         # "200":
           # description: Successful Operation
@@ -371,6 +417,250 @@ paths:
                 properties:
                   error:
                     type: string
+
+  /comment:
+    get:
+      tags:
+        - Comments
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /comments:
+    post:
+      tags:
+        - Comments
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    
+    put:
+      tags:
+        - Comments
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    delete: 
+      tags:
+        - Comments
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /reaction:
+    get:
+      tags:
+        - Reactions
+      # parameters:
+        # - name: commentId
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      tags:
+        - Reactions
+      # parameters:
+        # - name: postId
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string  
+    delete:
+      tags:
+        - Reactions
+      # parameters:
+        # - name: postId
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string  
+
+  /reactions:
+    get:
+      tags:
+        - Reactions
+      # parameters:
+        # - name: postId
+      responses:
+        # "200":
+          # description: Successful Operation
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/RolesResponse"
+        "204":
+          description: No content found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+
+
 components:
   schemas:
     UserSchema:
@@ -543,10 +833,10 @@ components:
       properties:
         userId:
           type: string
-          example: 
+          example: 65cb067f1991171ed88ab6de
         title:
           type: string
-          example: 
+          example: "vccjilacnoncac"
         body:
           type: string
         createdAt:
@@ -595,8 +885,10 @@ components:
       properties:
         userId:
           type: string
+          example: 65cb067f1991171ed88ab6de
         postId:
           type: string
+          example: 65cb067f1991171ed88ab6de
         body:
           type: string
           format: email
@@ -613,10 +905,13 @@ components:
       properties:
         userId:
           type: string
+          example: 65cb067f1991171ed88ab6de
         postId:
           type: string
+          example: 65cb067f1991171ed88ab6de
         commentId:
           type: string
+          example: 65cb067f1991171ed88ab6de
         emoji:
           type: string
           enum:

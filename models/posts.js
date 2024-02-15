@@ -16,14 +16,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
     images: {
         type: [String],
-        default: null
+        default: []
     }
-})
+}, { timestamps: true })
 
 exports.Posts = mongoose.model('posts', postSchema)
