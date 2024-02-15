@@ -5,7 +5,7 @@ const { findById } = require("../models/users");
 
 exports.createPosts = async(req) => {
     try{
-    const {userId} = req.params;
+    const {userId} = req.id;
     const { title, body} = req.body
     console.log(req.body)
     let newImages
@@ -39,13 +39,11 @@ exports.getAllPost = async () => {
         console.log(err)
         return err
     }
-
-
 }
 
 exports.getPost = async (req) => {
     try{
-    const {userId} = req.params 
+    const {userId} = req.body
     
         const post = Posts.find({userId: userId}).sort({createdAt: -1}).limit(10)
         return post

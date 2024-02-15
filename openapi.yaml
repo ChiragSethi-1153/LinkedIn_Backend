@@ -14,11 +14,11 @@ paths:
       summary: Create a new user
       description: Creates a new user
       requestBody:
-        description: Request to create advisor
+        description: Request to create User. Name Email & password are required fields
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserSchema'
+              $ref: '#/components/schemas/UserSchemaSignup'
         required: true
       responses:
         '201':
@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSchema'
+                $ref: '#/components/schemas/UserSchemaSignup'
         '409':
             description: Bad Request/User already exists! Login instead
             content:
@@ -60,7 +60,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserSchema'
+              $ref: '#/components/schemas/UserSchemaLogin'
         required: true
       responses:
         '200':
@@ -68,7 +68,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSchema'
+                $ref: '#/components/schemas/UserSchemaLogin'
         '204':
             description: User not found
             content:
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSchema'
+                $ref: '#/components/schemas/UserSchemaResponses'
         '204':
             description: User not found
             content:
@@ -152,7 +152,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserSchema'
+              $ref: '#/components/schemas/UserSchemaRequest'
         required: true
       responses:
         '200':
@@ -195,49 +195,38 @@ paths:
                   error:
                     type: string
 
-  /advisors/{advisorId}:
-    get:
-      summary: Get a advisor's complete information
-      description: Returns a advisor's complete information
-      operationId: getAdvisorById
+  /posts:
+    post:
+      summary: Creates post 
+      description: Creates a new post for a user
       tags:
-        - Advisors
+        - Posts
       parameters:
-        - name: 'advisorId'
-          in: path
+        - name: 'userId'
+          in: header
           required: true
-          description: The UUID of advisor
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          description: The ObjectID of user
+          example: 
           schema:
             type: string
-            format: uuid
+      requestBody:
+        description: Requests to create a new post for user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostSchemaRequest'
+        required: true
       responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserSchema"
-        "400":
-          description: Invalid request payload
+        "201":
+          description: Post Created Successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
+                  message:
                     type: string
-                    example: The provided advisorId is not valid, 1234
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Advisor not found
+                    example: Post Created Successfully
         "500":
           description: Internal server error
           content:
@@ -247,23 +236,26 @@ paths:
                 properties:
                   error:
                     type: string
-    patch:
+    get:
       tags:
-        - Advisors
-      parameters:
-        - name: 'advisorId'
-          in: path
-          required: true
-          description: The UUID of advisor
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-          schema:
-            type: string
-            format: uuid
-      summary: Restore deleted advisor
-      description: Restores the advisor and set the status to active. Returns a message after restoring the advisor
+        - Posts
+      summary: Get posts for a particular user
+      description: Getting all posts for a particular user
       responses:
         '200':
-          description: Advisor restored successfully
+          description: Got all posts successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/PostSchemaResponses"
+                properties:
+
+                  message:
+                    type: string
+                    example: Display Posts
+        '204':
+          description: No Post Found
           content:
             application/json:
               schema:
@@ -271,27 +263,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Advisor restored successfully.
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Advisor not found
-        '400':
-          description: Invalid request payload
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The provided advisorId is not valid, 1234
+                    example: "User has not Posted yet"
         '500':
           description: Internal server error
           content:
@@ -301,6 +273,7 @@ paths:
                 properties:
                   error:
                     type: string
+
     delete:
       tags:
         - Advisors
@@ -449,6 +422,121 @@ components:
         - email
         - password
 
+    UserSchemaSignup:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "name"
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - name
+        - email
+        - password
+
+    UserSchemaLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
+
+
+    UserSchemaResponses:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "name"
+        email:
+          type: string
+          example: "user@email.com"
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            suite:
+              type: string
+            city:
+              type: string
+            zipcode: 
+              type: string
+            geo:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        phone:
+          type: string
+        profileImage:
+          type: string
+        website:
+          type: string
+        company: 
+          type: object
+          properties:
+            name:
+              type: string
+            catchphrase:
+              type: string
+            bs:
+              type: string
+
+
+    UserSchemaRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "name"
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            suite:
+              type: string
+            city:
+              type: string
+            zipcode: 
+              type: string
+            geo:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        phone:
+          type: string
+        profileImage:
+          type: string
+        website:
+          type: string
+        company: 
+          type: object
+          properties:
+            name:
+              type: string
+            catchphrase:
+              type: string
+            bs:
+              type: string
+      
 
     postsSchema:
       type: object
@@ -472,6 +560,35 @@ components:
       required:
         - body
         - title
+
+    PostSchemaRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: 
+        body:
+          type: string    
+        images:
+          type: array
+          items: 
+            type: string
+      required:
+        - body
+        - title
+
+    PostSchemaResponses:
+      type: object
+      properties:
+        title:
+          type: string
+          example: 
+        body:
+          type: string    
+        images:
+          type: array
+          items: 
+            type: string
       
     commentSchema:
       type: object
