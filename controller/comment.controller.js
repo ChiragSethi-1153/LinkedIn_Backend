@@ -23,7 +23,7 @@ exports.getAllComments = async (req, res) => {
 
 exports.editComment = async (req, res) => {
     try{
-        const {userId} = req.id
+        
         const response = await commentService.editComments(req)
         if(response === 401){
             console.log(response)
