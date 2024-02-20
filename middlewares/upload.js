@@ -9,6 +9,6 @@ exports.upload = multer({
         filename: (req, file, cb) => {
            return cb(null, `${Date.now()}_${file.originalname}`)
         }
- 
+   
     })
 }).fields([{name: 'images', maxCount: 12}]);

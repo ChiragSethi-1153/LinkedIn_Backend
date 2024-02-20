@@ -1,7 +1,4 @@
 const { Posts } = require("../models/posts")
-const multer = require('multer');
-const { findById } = require("../models/users");
-// const path = require('path')
 
 exports.createPosts = async(req) => {
     try{
