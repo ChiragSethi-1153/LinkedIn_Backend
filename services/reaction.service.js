@@ -4,8 +4,9 @@ const { Reactions } = require("../models/reactions")
 
 exports.savePostReaction = async (req) => {
     try{ 
+        const userId = req.id
         const {postId} = req.params
-        const {userId, emoji} = req.body
+        const {emoji} = req.body
         const reaction = new Reactions({
             postId: postId,
             userId,
@@ -34,8 +35,9 @@ exports.getPostReactions = async (req) => {
 
 exports.saveCommentReaction = async (req) => {
     try{ 
+        const userId = req.id
         const {commentId} = req.params
-        const {userId, emoji} = req.body
+        const {emoji} = req.body
         const reaction = new Reactions({
             commentId: commentId,
             userId,
@@ -49,7 +51,7 @@ exports.saveCommentReaction = async (req) => {
     }
 }
 
-exports.getCommentReactions = async () => {
+exports.getCommentReactions = async (req) => {
     try{
         const {commentId} = req.params
         const reactions = await Reactions.countDocuments({commentId: commentId})
@@ -64,8 +66,9 @@ exports.getCommentReactions = async () => {
 
 exports.updateReaction = async (req) => {
     try{
+        const userId = req.id
     const {reactionId} = req.params
-    const {userId, emoji} = req.body
+    const {emoji} = req.body
     const currentUserId = await Reactions.findById(reactionId)
 
    
@@ -74,7 +77,7 @@ exports.updateReaction = async (req) => {
             return edit
         }   
         else {
-            return "Unauthorized User"
+            return 401
         }
     }
     catch(err){
@@ -86,7 +89,7 @@ exports.updateReaction = async (req) => {
 exports.removeReaction = async (req) => {
     try{
     const {reactionId} = req.params
-    const {userId} = req.id
+    const userId = req.id
     const currentUserId = await Reactions.findById(reactionId)
 
         if(userId == currentUserId.userId ){
@@ -94,7 +97,7 @@ exports.removeReaction = async (req) => {
             return del
         }   
         else {
-            return "Unauthorized User"
+            return 401
         }
     }
     catch(err){

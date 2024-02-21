@@ -47,7 +47,13 @@ exports.getCommentReactions = async (req, res) => {
 exports.updateReaction = async (req, res) => {
     try{
         const response = await reactionService.updateReaction(req)
-        return res.status(202).json(response)
+        if(response === 401){
+            return res.status(202).json({message: 'Unauthorized user'})
+        }
+        else{
+            return res.status(200).json(response)
+        }
+        
     }
     catch(err){
         console.log(err)
@@ -58,7 +64,13 @@ exports.updateReaction = async (req, res) => {
 exports.removeReaction = async (req, res) => {
     try{
         const response = await reactionService.removeReaction(req)
-        return res.status(202).json(response)
+        if(response === 401){
+            return res.status(401).json({message: 'Unauthorized user'})
+        }
+        else{
+            return res.status(202).json(response)
+        }
+        
     }catch(err){
         console.log(err)
         return res.status(500).send(err)

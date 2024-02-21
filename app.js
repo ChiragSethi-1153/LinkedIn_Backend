@@ -24,9 +24,8 @@ app.use(cors())
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", require('./routes'))
 app.use('/uploads',express.static(path.join(__dirname, 'uploads')))
-
+app.use("/", require('./routes'))
 app.listen(process.env.PORT, () => {
     console.log("server connected 8080")
 })

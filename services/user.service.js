@@ -70,7 +70,7 @@ exports.getUser = async (req) => {
 
 exports.editUser = async (req) => {
     try{
-        const {userId} = req.id
+        const userId = req.id
         const {name, address, phone, website, company} = req.body
         const currentUserId = await Users.findById(userId)
         if(currentUserId == null){ 

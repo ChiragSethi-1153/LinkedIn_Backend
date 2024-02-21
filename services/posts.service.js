@@ -2,7 +2,7 @@ const { Posts } = require("../models/posts")
 
 exports.createPosts = async(req) => {
     try{
-    const {userId} = req.id;
+    const userId = req.id;
     const { title, body} = req.body
     // console.log(req.body)
     let newImages
@@ -11,7 +11,7 @@ exports.createPosts = async(req) => {
         // console.log(newImages)
     }
     const post = new Posts({
-        userId: userId,
+        userId,
         title,
         body,
         images: newImages
@@ -29,7 +29,8 @@ exports.createPosts = async(req) => {
 exports.getAllPost = async () => {
 
     try{
-        const posts = await Posts.find().sort({createdAt: -1}).limit(10)
+        const posts = await Posts.find().populate("userId", 'name').sort({createdAt: -1}).limit(10).exec()
+        console.log(posts)
         return posts
     }catch(err)
     {

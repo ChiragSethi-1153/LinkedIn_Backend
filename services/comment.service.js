@@ -5,7 +5,7 @@ const db = require('mongoose');
 exports.postComment = async (req) => {
     try{
     const userId = req.id
-    const {postId} = req.params;
+    const {postId} = req.params
     const {body} = req.body
 
         const comment = new Comments({
@@ -24,7 +24,8 @@ exports.postComment = async (req) => {
 
 exports.getAllComments = async (req) => {
     try{
-        const comments = await Comments.find().sort({createdAt: -1}).limit(3);
+        const {postId} = req.params
+        const comments = await Comments.find({postId: postId}).populate("userId", "name").sort({createdAt: -1}).limit(5);
         return comments
     }catch(err)
     {
@@ -36,7 +37,7 @@ exports.getAllComments = async (req) => {
 
 exports.editComments = async (req) => {
     try{
-        const {userId} = req.id
+        const userId = req.id
     const {commentId} = req.params
     const { body} = req.body
     const currentUserId = await Comments.findById(commentId)
@@ -62,7 +63,7 @@ exports.deleteComment = async (req) => {
     // const session = await db.startSession();
     // session.startTransaction()
     const {commentId} = req.params
-    const {userId} = req.id
+    const userId = req.id
     const currentUserId = await Comments.findById(commentId)
     
     // const delReaction = await Reactions.findByIdAndDelete[(commentId), {session: session}]
