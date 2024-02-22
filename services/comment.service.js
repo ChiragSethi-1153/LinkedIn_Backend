@@ -14,7 +14,8 @@ exports.postComment = async (req) => {
             body,
         })
         await comment.save()
-        return comment
+        const comm = comment.populate("userId", "name")
+        return comm
     }
     catch(err){
         console.log(err)
