@@ -5,12 +5,12 @@ const db = require('mongoose');
 exports.postComment = async (req) => {
     try{
     const userId = req.id
-    const {postId} = req.params
-    const {body} = req.body
+    // const {postId} = req.params
+    const {postId, body} = req.body
 
         const comment = new Comments({
             userId,             
-            postId: postId,
+            postId,
             body,
         })
         await comment.save()
