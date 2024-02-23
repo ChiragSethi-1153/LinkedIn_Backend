@@ -63,6 +63,9 @@ const userSchema = new mongoose.Schema({
       },
       bs:{
         type: String
+      },
+      designation: {
+        type: String
       }
     }
 

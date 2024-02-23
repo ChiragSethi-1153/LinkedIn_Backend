@@ -30,7 +30,7 @@ exports.getAllPost = async () => {
 
     try{
         const posts = await Posts.find().populate("userId", 'name').sort({createdAt: -1}).limit(10).exec()
-        console.log(posts)
+        // console.log(posts)
         return posts
     }catch(err)
     {
