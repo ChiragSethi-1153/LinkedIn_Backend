@@ -71,13 +71,13 @@ exports.getUser = async (req) => {
 exports.editUser = async (req) => {
     try{
         const userId = req.id
-        const {name, address, phone, website, company, summary} = req.body
+        const {name, address, phone, website, company, summary, headline} = req.body
         const currentUserId = await Users.findById(userId)
         if(currentUserId == null){ 
             return 404
         }
         else {
-            const userDetails = await Users.findByIdAndUpdate(userId, {name, address, phone, website, company, summary}, {new: true})
+            const userDetails = await Users.findByIdAndUpdate(userId, {name, address, phone, website, company, summary, headline}, {new: true})
             return userDetails
         }
 
