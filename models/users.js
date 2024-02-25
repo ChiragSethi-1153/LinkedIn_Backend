@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: Object,
+        country: {
+            type: String
+        },
         street: {
             type: String
         },
@@ -67,8 +70,13 @@ const userSchema = new mongoose.Schema({
       designation: {
         type: String
       }
+    },
+    headline: {
+        type: String
+    },
+    summary: {
+        type: String
     }
-
 }, {timestamps: true})
 
 const Users = mongoose.model('users' , userSchema)
