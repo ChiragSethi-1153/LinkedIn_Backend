@@ -1,5 +1,4 @@
 const {Comments} = require('../models/comments')
-const db = require('mongoose');
 
 
 exports.postComment = async (req) => {

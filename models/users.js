@@ -76,9 +76,10 @@ const userSchema = new mongoose.Schema({
     },
     summary: {
         type: String
-    }
+    },
+
 }, {timestamps: true})
 
-const Users = mongoose.model('users' , userSchema)
 
+const Users = mongoose.model('users' , userSchema)
 module.exports = Users

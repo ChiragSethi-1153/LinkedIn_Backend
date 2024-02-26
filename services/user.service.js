@@ -86,3 +86,19 @@ exports.editUser = async (req) => {
         return err
     }
 }
+
+exports.getAllUsers = async (req,res) => {
+    try{
+        const userId = req.id
+        const user = await Users.find({'_id': {'$ne': userId}})
+        if(!user) {
+            return 404
+        }
+        else{
+            return user
+        }
+    }catch(err){
+        console.log(err)
+        return err
+    }
+}
