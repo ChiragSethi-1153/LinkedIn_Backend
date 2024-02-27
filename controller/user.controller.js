@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
 
-    try{
+    try{ 
         const response = await userService.login(req, res)
         if(response === 204){
             return res.status(404).json({message: 'User not found. Signup Please!'})
@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
             return res.status(400).json({message: "Invalid Email / Password"})
         }
             const token = jwt.sign({id: response._id}, key, {
-                expiresIn: "10hr"
+                expiresIn: "12hr"
             });
             console.log("Generated Token\n", token);
             return res.status(200).json({message: "Successfully Logged In", user: response, token})

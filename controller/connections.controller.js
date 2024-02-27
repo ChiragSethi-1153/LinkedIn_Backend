@@ -30,7 +30,7 @@ exports.getConnectionBy = async (req, res) => {
     try{
         const response = await connectionService.getConnectionBy(req)
         if(response === 404){
-            return res.status(404).json({message: 'No pending invitations'})
+            return res.status(404).json({message: 'No new invitations'})
         }
     else {
         return res.status(200).json({message: 'connection requests found', response})

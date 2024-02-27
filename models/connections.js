@@ -4,7 +4,7 @@ const Users = require('./users')
 const connectionSchema = new mongoose.Schema({
     status: {
         type: String,
-        enum: ['accepted', 'pending', 'rejected', 'deleted'],
+        enum: ['accepted', 'pending', 'rejected', 'deleted', 'withdraw'],
         default: 'pending'
     },
     connectionTo: {

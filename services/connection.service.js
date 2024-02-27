@@ -7,7 +7,6 @@ exports.newConnection = async (req) => {
         const {Id} = req.params
         // const {status} = req.body
         const connect =  new Connections({
-           
             connectionTo: Id,
             connectionBy: userId,
         })
@@ -41,7 +40,7 @@ exports.getConnectionBy = async (req) => {
     try{
         const userId = req.id
         // const {status} = req.body
-        const pending = await Connections.find({status: 'pending', connectionBy: userId})
+        const pending = await Connections.find({status: 'pending', connectionBy: userId}).populate('connectionTo', "name company headline")
         if(pending.length === 0){
             return 404
         }

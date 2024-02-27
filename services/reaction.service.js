@@ -7,13 +7,24 @@ exports.savePostReaction = async (req) => {
         const userId = req.id
         const {postId} = req.params
         const {emoji} = req.body
-        const reaction = new Reactions({
-            postId: postId,
-            userId,
-            emoji
-        })
-        await reaction.save()
-        return reaction
+        const existingReaction =  await Reactions.findOne({"$and": [{userId: userId}, {postId: postId}]}) 
+        console.log(existingReaction?.emoji)
+
+        if(existingReaction){
+            const newReaction = await Reactions.findOneAndUpdate({"$and": [{userId: userId}, {postId: postId}]}, {emoji: emoji}, {new: true})
+            console.log(newReaction,"hbiu")
+            return newReaction
+        }
+        else {
+            const reaction = new Reactions({
+                postId: postId,
+                userId,
+                emoji
+            })
+            await reaction.save()
+            return reaction
+        }
+        
     }catch(err){
         console.log(err)
         return err 
@@ -22,9 +33,13 @@ exports.savePostReaction = async (req) => {
 
 exports.getPostReactions = async (req) => {
     try{
+        const userId = req.id
         const {postId} = req.params
-        const reactions = await Reactions.countDocuments({postId: postId})
-        return reactions
+        const totalReactions = await Reactions.countDocuments({postId: postId})
+        
+        const currReaction = await Reactions.find({"$and": [{postId: postId}, {userId: userId}]})
+        const reactions = {currReaction: currReaction, totalReactions}
+        return reactions 
     }
     catch(err){
         console.log(err)
@@ -38,13 +53,25 @@ exports.saveCommentReaction = async (req) => {
         const userId = req.id
         const {commentId} = req.params
         const {emoji} = req.body
-        const reaction = new Reactions({
-            commentId: commentId,
-            userId,
-            emoji
-        })
-        await reaction.save()
-        return reaction
+
+        const existingReaction =  await Reactions.findOne({"$and": [{userId: userId}, {commentId: commentId}]}) 
+        console.log(existingReaction?.emoji)
+
+        if(existingReaction){
+            const newReaction = await Reactions.updateOne({"$and": [{userId: userId}, {commentId: commentId}]}, {emoji: emoji})
+            console.log(newReaction)
+            return newReaction
+        }
+        else {
+            const reaction = new Reactions({
+                commentId: commentId,
+                userId,
+                emoji
+            })
+            await reaction.save()
+            return reaction
+        }
+     
     }catch(err){
         console.log(err)
         return err 
@@ -88,17 +115,16 @@ exports.updateReaction = async (req) => {
 
 exports.removeReaction = async (req) => {
     try{
-    const {reactionId} = req.params
+    const {postId} = req.params
     const userId = req.id
-    const currentUserId = await Reactions.findById(reactionId)
 
-        if(userId == currentUserId.userId ){
-            const del = await Reactions.findByIdAndDelete(reactionId)
+        // if(){
+            const del = await Reactions.findOneAndDelete({"$and": [{postId: postId},{userId: userId}]})
             return del
-        }   
-        else {
-            return 401
-        }
+        // }   
+        // else {
+        //     return 401
+        // }
     }
     catch(err){
         console.log(err)

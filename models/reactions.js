@@ -24,8 +24,7 @@ const reactionSchema = new mongoose.Schema({
     },
     emoji: {
         type: String,
-        enum: ['Like','Celebrate', 'Support', 'Love', 'Insightful', 'Funny'],    
-        // default:'Like'
+        enum: ['Like','Celebrate', 'Support', 'Love', 'Insightful', 'Funny'],
     }
 }, { timestamps: true })
 
