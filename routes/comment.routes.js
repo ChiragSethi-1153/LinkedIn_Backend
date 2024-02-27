@@ -8,4 +8,4 @@ router.put('/comment/:commentId', verifyToken, commentController.editComment)
 router.delete('/comment/:commentId', verifyToken, commentController.deleteComment)
 // router.patch('/comment/:id', commentController.editComment)
 
-module.exports = router 
+module.exports = router  

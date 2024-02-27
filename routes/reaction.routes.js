@@ -12,4 +12,4 @@ router.get('/reaction/:commentId',  reactionController.getCommentReactions)
 router.delete('/reaction/:postId', verifyToken, reactionController.removeReaction)
 router.delete('/reactions/:commentId', reactionController.deleteReactions)
 
-module.exports = router
+module.exports = router  

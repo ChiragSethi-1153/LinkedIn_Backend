@@ -9,7 +9,7 @@ router.get('/connectionby', verifyToken, connectionsController.getConnectionBy)
 router.get('/connections', verifyToken, connectionsController.getAllConnections)
 
 router.put('/connection/:Id', verifyToken, connectionsController.editConnectionStatus)
-
+router.get('/suggestions', verifyToken, connectionsController.getSuggestions)
 // router.delete()
 
-module.exports = router 
+module.exports = router  

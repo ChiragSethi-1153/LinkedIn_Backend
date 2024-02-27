@@ -1,4 +1,5 @@
 const Connections = require("../models/connections")
+const Users = require("../models/users")
 
 
 exports.newConnection = async (req) => {
@@ -6,12 +7,19 @@ exports.newConnection = async (req) => {
         const userId = req.id
         const {Id} = req.params
         // const {status} = req.body
-        const connect =  new Connections({
-            connectionTo: Id,
-            connectionBy: userId,
-        })
-    await connect.save()
-    return connect
+        // const currStatus = await Connections.find({"or": [{"$and": [{connectionBy: userId}, {connectionTo: Id}]}, {"$and": [{connectionBy: Id}, {connectionTo: userId}]}]})
+        // console.log(currStatus)
+        // if(currStatus){
+        //     return currStatus
+        // }
+        // else{ 
+            const connect =  new Connections({
+                connectionTo: Id,
+                connectionBy: userId,
+            })
+            await connect.save()
+            return connect
+        // }
 
     }catch(err){
         console.log(err)
@@ -83,6 +91,26 @@ exports.editConnectionStatus = async (req) => {
         else{
             return newStatus
         }
+    }catch(err){
+        console.log(err)
+        return err
+    }
+}
+
+exports.getSuggestions = async (req) => {
+    try{ 
+        const userId = req.id
+        const response = await Connections.find({"$or": [{connectionBy: userId}, {connectionTo: userId}]})
+
+        const users = response.map((i) => i.connectionBy == userId ? i.connectionTo : i.connectionBy)
+        
+        users.push(userId)
+        console.log(users)
+        const suggestions = await Users.find({_id: {$nin: users}}, "-password")
+        if(!suggestions){
+            return 404
+        }
+        return suggestions
     }catch(err){
         console.log(err)
         return err

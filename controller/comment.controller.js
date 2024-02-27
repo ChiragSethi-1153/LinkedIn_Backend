@@ -1,5 +1,5 @@
 const {commentService} = require('../services')
-
+ 
 exports.postComment = async (req, res) => {
     try{
         const response = await commentService.postComment(req)
