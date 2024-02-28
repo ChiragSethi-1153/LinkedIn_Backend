@@ -64,12 +64,7 @@ exports.updateReaction = async (req, res) => {
 exports.removeReaction = async (req, res) => {
     try{
         const response = await reactionService.removeReaction(req)
-        if(response === 401){
-            return res.status(401).json({message: 'Unauthorized user'})
-        }
-        else{
-            return res.status(202).json(response)
-        }
+            return res.status(202).json({message: 'removed successfully' , response})
         
     }catch(err){
         console.log(err)

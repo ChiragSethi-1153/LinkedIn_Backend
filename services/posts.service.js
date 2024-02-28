@@ -29,7 +29,7 @@ exports.createPosts = async(req) => {
 exports.getAllPost = async () => {
 
     try{
-        const posts = await Posts.find().populate("userId", 'name').sort({createdAt: -1}).limit(10).exec()
+        const posts = await Posts.find().populate("userId", 'name headline company').sort({createdAt: -1}).limit(10).exec()
         // console.log(posts)
         return posts
     }catch(err)

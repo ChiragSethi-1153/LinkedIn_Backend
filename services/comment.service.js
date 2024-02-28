@@ -25,7 +25,7 @@ exports.postComment = async (req) => {
 exports.getAllComments = async (req) => {
     try{
         const {postId} = req.params
-        const comments = await Comments.find({postId: postId}).populate("userId", "name").sort({createdAt: -1}).limit(5);
+        const comments = await Comments.find({postId: postId}).populate("userId", "name headline company").sort({createdAt: -1}).limit(5);
         return comments
     }catch(err)
     {
