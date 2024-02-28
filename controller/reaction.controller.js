@@ -2,7 +2,8 @@ const {reactionService} = require('../services')
 
 exports.savePostReactions = async (req, res) => {
     try{
-        const response = await reactionService.savePostReaction(req)
+        const response = await reactionService.savePostReaction(req);
+        console.log('response', response);
         return res.status(201).json({response})
     }catch(err){
         console.log(err)

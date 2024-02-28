@@ -31,11 +31,12 @@ exports.getConnectionTo = async (req) => {
     try{
         const userId = req.id
         // const {status} = req.body
-        const pending = await Connections.find({status: 'pending', connectionTo: userId})
+        const pending = await Connections.find({status: 'pending', connectionTo: userId}).populate('connectionBy', "name company headline")
         if(pending.length === 0){
             return 404
         }
         else{
+            // console.log(pending)
             return pending
         }
     }catch(err){
@@ -53,6 +54,7 @@ exports.getConnectionBy = async (req) => {
             return 404
         }
         else{
+            console.log(pending)
             return pending
         }
     }catch(err){

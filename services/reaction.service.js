@@ -26,8 +26,8 @@ exports.savePostReaction = async (req) => {
         }
         
     }catch(err){
-        console.log(err)
-        return err 
+        console.log(err);
+        throw err;
     }
 }
 
@@ -37,13 +37,15 @@ exports.getPostReactions = async (req) => {
         const {postId} = req.params
         const totalReactions = await Reactions.countDocuments({postId: postId})
         
-        const currReaction = await Reactions.find({"$and": [{postId: postId}, {userId: userId}]})
+        const currReaction = await Reactions.find({"$and": [{postId: postId}, {userId: userId}]});
         const reactions = {currReaction: currReaction, totalReactions}
+        console.log(reactions);
+
         return reactions 
     }
     catch(err){
         console.log(err)
-        return err
+        throw err;
     }
 }
 
