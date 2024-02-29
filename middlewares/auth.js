@@ -4,11 +4,11 @@ const key = process.env.JWT_KEY
 
 exports.verifyToken = async (req, res, next) => {
 
-    const headers = req.headers[`authorization`]
-    const token = headers.split(" ")[1]
-    // console.log(headers)
+    const header = req.headers[`authorization`]
+    // console.log(req.headers)
+    const token = header.split(" ")[1]
     // console.log(token)
-    console.log(token);
+    // console.log(token); 
     if (!token) {
         return res.status(404).json({ message: "No token Found" })
     }
@@ -26,17 +26,4 @@ exports.verifyToken = async (req, res, next) => {
 
     }
 
-    // try {
-    //     const headers = req.headers[`authorization`];
-    //     const token = headers.split(" ")[1];
-
-    //     if (!token) {
-    //         return res.status(404).json({ message: "No token Found" })
-    //     }
-
-    //     const response = await jwt.verify(token,key);
-
-    // } catch (err) {
-    //     return res.status(500).send('Internal Server Error');
-    // }
 };

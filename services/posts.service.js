@@ -5,18 +5,22 @@ exports.createPosts = async(req) => {
     const userId = req.id;
     const { title, body} = req.body
     // console.log(req.body)
-    let newImages
+    let newImages = []
     if(req.files.images !== null){
          newImages = req.files.images.map((i) => {return i.path})     
-        // console.log(newImages)
+        console.log(newImages,"ghvugyiv")
     }
+
     const post = new Posts({
         userId,
         title,
         body,
         images: newImages
     })
-  
+    console.log(userId,
+        title,
+        body,
+        newImages,"guy7gbh")
         await post.save()
         return post
     }
