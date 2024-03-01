@@ -14,8 +14,8 @@ exports.newConnection = async (req, res) => {
 exports.getConnectionTo = async (req, res) => {
     try{
         const response = await connectionService.getConnectionTo(req)
-        if(response ===  404){
-            return res.status(404).json({message: 'No new invitations'})
+        if(response ===  204){
+            return res.status(204)
         }
         else {
             return res.status(200).json({message: 'connection requests found', response})
@@ -29,8 +29,8 @@ exports.getConnectionTo = async (req, res) => {
 exports.getConnectionBy = async (req, res) => {
     try{
         const response = await connectionService.getConnectionBy(req)
-        if(response === 404){
-            return res.status(404).json({message: 'No new invitations'})
+        if(response === 204){
+            return res.status(204)
         }
     else {
         return res.status(200).json({message: 'connection requests found', response})
@@ -47,8 +47,8 @@ exports.getAllConnections = async (req, res) => {
     try{
         const response = await connectionService.getAllConnections(req)
 
-        if(response === 404){
-            return res.status(404).json({message: 'No connections found'})
+        if(response === 204){
+            return res.status(204)
         }
     else {
         return res.status(200).json({message: 'All Connections', response})

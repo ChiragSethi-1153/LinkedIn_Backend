@@ -35,11 +35,12 @@ exports.getConnectionTo = async (req) => {
         const userId = req.id
         // const {status} = req.body
         const pending = await Connections.find({status: 'pending', connectionTo: userId})
+        .sort({createdAt: -1})
         .populate('connectionBy', "name company headline")
         
         if(pending.length === 0){
             console.log(pending)
-            return 404
+            return 204
         }
         else{
             console.log(pending)
@@ -56,9 +57,10 @@ exports.getConnectionBy = async (req) => {
         const userId = req.id
         // const {status} = req.body
         const pending = await Connections.find({status: 'pending', connectionBy: userId})
+        .sort({createdAt: -1})
         .populate('connectionTo', "name company headline")
         if(pending.length === 0){
-            return 404
+            return 204
         }
         else{
             console.log(pending)
@@ -77,7 +79,7 @@ exports.getAllConnections = async (req) => {
         const connections = await Connections.find({status: 'accepted', $or: [ { connectionBy: userId }, { connectionTo: userId } ] })
         const total = connections.length
         if(connections.length === 0){
-            return 404
+            return 204
         }
         else{
             return {connections, total}
