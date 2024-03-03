@@ -15,13 +15,8 @@ exports.createPosts = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try{
-        const response  = await postsService.getAllPost();
-        if(response === null ){
-            return res.status(404).json({message: 'No Post Found', response})
-        }else{
+        const response  = await postsService.getAllPost(req);
             return res.status(200).json({response})
-        }
-        
     }catch(err){
         console.log(err)
         return res.status(500).send(err)
