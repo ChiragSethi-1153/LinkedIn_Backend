@@ -3,5 +3,6 @@ module.exports = {
     postsController: require('./posts.controller'),
     commentController: require('./comment.controller'),
     reactionController: require('./reaction.controller'),
-    connectionsController: require('./connections.controller')
+    connectionsController: require('./connections.controller'),
+    roomController: require('./room.controller')
 }

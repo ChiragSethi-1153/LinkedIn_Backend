@@ -8,12 +8,12 @@ exports.newConnection = async (req) => {
         const userId = req.id
         const {Id} = req.body
         // const {status} = req.body
-        // const currStatus = await Connections.find({"or": [{connectionBy: userId, Id}, {connectionTo: Id, userId}]})
-        // console.log(currStatus)
-        // if(currStatus){
-        //     return currStatus
-        // }
-        // else{ 
+        const currStatus = await Connections.find({"or": [{connectionBy: userId, connectionTo: Id}, {connectionBy: Id, connectionTo: userId}]})
+        console.log(currStatus)
+        if(currStatus.length > 0 ){
+            return currStatus
+        }
+        else{ 
             const connect =  new Connections({
                 connectionBy: userId,
                 connectionTo: Id,
@@ -21,7 +21,7 @@ exports.newConnection = async (req) => {
             console.log(connect)
             await connect.save()
             return connect
-        // }
+        }
 
     }catch(err){
         console.log(err)

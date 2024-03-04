@@ -20,7 +20,7 @@ exports.createPosts = async (req) => {
       images: newImages,
     });
     // console.log(userId, title, body, newImages, "guy7gbh");
-    await post.save();
+    (await post.save()).populate('userId', 'name headline company');
     return post;
   } catch (err) {
     console.log(err);
@@ -31,16 +31,17 @@ exports.createPosts = async (req) => {
 exports.getAllPost = async (req) => {
   try {
     console.log(req.query.createdAt);
-    let time = req.query.createdAt;
-    // if (req.query && req.query.createdAt) {
-    //   time = new Date(req.query.createdAt); 
-    // }
+    let time 
+    if (req.query && req.query.createdAt) {
+      time = new Date(req.query.createdAt) || new Date()
+      console.log(time)
+    }
 
     if (time) {
       const posts = await Posts.find({ createdAt: { $lt: time } })
         .populate("userId", "name headline company")
         .sort({ createdAt: -1 })
-        .limit(10)
+        .limit(2)
         .exec();
       console.log(posts);
       return posts;
@@ -49,7 +50,7 @@ exports.getAllPost = async (req) => {
       const posts = await Posts.find()
         .populate("userId", "name headline company")
         .sort({ createdAt: -1 })
-        .limit(10)
+        .limit(2)
         .exec();
       console.log(posts);
       return posts;
