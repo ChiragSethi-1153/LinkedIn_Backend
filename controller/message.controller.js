@@ -1,8 +1,8 @@
-const {roomService} = require('../services')
+const {messageService} = require('../services')
 
-exports.createRoom = async (req, res) => {
+exports.createMessage = async (req, res) => {
     try{
-        const response = await roomService.createRoom(req)
+        const response = await messageService.createMessages(req)
         return res.status(200).json(response)
     }catch(err){
         console.log(err)
@@ -10,9 +10,9 @@ exports.createRoom = async (req, res) => {
     }
 }
 
-exports.fetchRooms = async (req, res) => {
+exports.fetchMessages = async (req, res) => {
     try{
-        const response = await roomService.fetchRooms(req)
+        const response = await messageService.fetchMessages(req)
         return res.status(200).json(response)
     }catch(err){
         console.log(err)

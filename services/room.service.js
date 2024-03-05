@@ -4,20 +4,35 @@ const { Room } = require("../models/room")
 
 exports.createRoom =  async (req) => {
     try{
-        // const userId = req.id
-        console.log(req.body)
+        
         const participants = req.body
         console.log(participants)
-
-        const room = new Room({
-            participants: participants
-        })
-        (await room.save()).populate("participants.participant", "name")
-        return room
-    
+        const existingRoom = await Room.findOne({participants}).populate("participants", "name headline")
+        console.log(existingRoom)
+        if(existingRoom){
+            return existingRoom
+        }
+        else{
+            const room = new Room({
+                participants: participants
+            })
+            await room.save()
+            return room.populate("participants", "name")
+        }
     }catch(err) {
         console.log(err)
         throw err
     }
-    
+}
+
+exports.fetchRooms = async (req) => {
+    try{
+        const userId = req.id
+        const rooms = await Room.find({participants: {"$all": [userId]}}).populate('participants', 'name headline').sort({createdAt: -1})
+        return rooms
+
+    }catch(err){
+        console.log(err)
+        throw err
+    }
 }

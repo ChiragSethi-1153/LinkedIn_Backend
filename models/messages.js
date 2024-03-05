@@ -3,7 +3,7 @@ const Room  = require('./room')
 const Users = require('./users')
 
 const messageSchema = new mongoose.Schema({
-    roomId: {
+    room: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Room,
         required: true
