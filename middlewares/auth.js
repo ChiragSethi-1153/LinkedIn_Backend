@@ -18,7 +18,7 @@ exports.verifyToken = async (req, res, next) => {
                 return res.status(400).json({ message: "Invalid Token" })
             }
             else {
-                console.log(user.id);
+                // console.log(user.id);
                 req.id = user.id
                 next();
             }
