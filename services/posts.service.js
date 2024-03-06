@@ -10,7 +10,7 @@ exports.createPosts = async (req) => {
       newImages = req.files.images.map((i) => {
         return i.path;
       });
-      console.log(newImages, "ghvugyiv");
+      // console.log(newImages, "ghvugyiv");
     }
 
     const post = new Posts({
@@ -30,7 +30,7 @@ exports.createPosts = async (req) => {
 
 exports.getAllPost = async (req) => {
   try {
-    console.log(req.query.createdAt);
+    // console.log(req.query.createdAt);
     let time 
     if (req.query && req.query.createdAt) {
       time = new Date(req.query.createdAt) || new Date()
@@ -43,7 +43,7 @@ exports.getAllPost = async (req) => {
         .sort({ createdAt: -1 })
         .limit(2)
         .exec();
-      console.log(posts);
+      // console.log(posts);
       return posts;
     } 
     else {
