@@ -1,8 +1,8 @@
-const { Server } = require('socket.io')
+const {Server} =  require('socket.io')
 
-module.exports = async() => {
+module.exports = async(http) => {
 
-const io = require('socket.io')(Server, {
+const io = new Server(http, {
     pingTimeout: 60000,
     cors: {
         origin: process.env.CLIENT_URL

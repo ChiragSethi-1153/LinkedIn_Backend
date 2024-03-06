@@ -18,11 +18,10 @@ const multer = require('multer')
 const path = require('path')
 const app = express()
 const socket = require('socket.io')
-const http = require('http').Server(app)
-module.exports = {http}
+const http = require('http').createServer(app)
 // socker(server)
 
-require('./config/ioManager')
+require('./config/ioManager')(http)
 require('./config/db')
 
 app.use(cors())

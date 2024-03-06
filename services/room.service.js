@@ -17,7 +17,7 @@ exports.createRoom =  async (req) => {
                 participants: participants
             })
             await room.save()
-            return room.populate("participants", "name")
+            return room.populate("participants", "name headline")
         }
     }catch(err) {
         console.log(err)
