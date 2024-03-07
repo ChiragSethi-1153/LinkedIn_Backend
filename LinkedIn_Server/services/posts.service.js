@@ -1,3 +1,4 @@
+const Connections = require("../models/connections");
 const { Posts } = require("../models/posts");
 
 exports.createPosts = async (req) => {
@@ -21,6 +22,12 @@ exports.createPosts = async (req) => {
     });
     // console.log(userId, title, body, newImages, "guy7gbh");
     (await post.save()).populate('userId', 'name headline company');
+
+    const connections = await Connections.find({status: 'accepted', $or: [ { connectionBy: userId }, { connectionTo: userId } ] })
+    console.log(connections)
+    const notificationData = {sender: userId, reciever: connections, type: 'post'}
+    const postNotification = await axios.post(`${process.env.NOTIFICATIONS_URL}/notifyPost`, notificationData)
+    console.log(postNotification)
     return post;
   } catch (err) {
     console.log(err);

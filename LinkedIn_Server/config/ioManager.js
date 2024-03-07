@@ -23,7 +23,17 @@ io.on("connection", (socket) => {
 
     socket.on('message', async ({content, roomId, sender})=> {
         console.log(content, " " , roomId, " ", sender)
-        const response = await createMessages(roomId, sender, content)
+        try{
+            const response = await createMessages(roomId, sender, content)
+            io.to(roomId).emit("message", {
+                content: content,
+                roomId: roomId,
+                sender: response?.sender,
+            })
+        }catch(err){
+            console.log(err)
+            
+        }
         
     //   socket.emit("message", {
     //         content: content,
@@ -31,11 +41,6 @@ io.on("connection", (socket) => {
     //         sender: response?.sender 
     //       })
 
-    io.to(roomId).emit("message", {
-        content: content,
-        roomId: roomId,
-        sender: response?.sender,
-    })
 
     })
 
