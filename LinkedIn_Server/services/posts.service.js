@@ -1,33 +1,53 @@
 const Connections = require("../models/connections");
+const axios = require('axios');
 const { Posts } = require("../models/posts");
 
 exports.createPosts = async (req) => {
   try {
+    // console.log(req)
     const userId = req.id;
     const { title, body } = req.body;
     // console.log(req.body)
     let newImages = [];
-    if (req.files.images !== null) {
-      newImages = req.files.images.map((i) => {
+    if (req.files !== null && req.files.images && req.files.images.length > 0) {
+      newImages =  req.files.images.map((i) => {
         return i.path;
       });
-      // console.log(newImages, "ghvugyiv");
+      console.log(newImages, "ghvugyiv");
     }
 
-    const post = new Posts({
+    const post = await new Posts({
       userId,
       title,
       body,
       images: newImages,
-    });
-    // console.log(userId, title, body, newImages, "guy7gbh");
+    }).populate('userId', "name headline company");
+    // console.log(post);
     (await post.save()).populate('userId', 'name headline company');
 
-    const connections = await Connections.find({status: 'accepted', $or: [ { connectionBy: userId }, { connectionTo: userId } ] })
+    const connectionsTo = await Connections.find({ status: 'accepted', connectionTo: userId })
+      // .populate('connectionBy', 'name headline company');
+
+    const connectionsBy = await Connections.find({ status: 'accepted', connectionBy: userId })
+      // .populate('connectionTo', 'name headline company');
+
+    let connections = [];
+    if (connectionsTo.length > 0) {
+      connections = [...connections, ...connectionsTo.map(c => ( c.connectionBy ))];
+    }
+
+    if (connectionsBy.length > 0) {
+      connections = [...connections, ...connectionsBy.map(c => ( c.connectionTo ))];
+    }
+
+
+
     console.log(connections)
-    const notificationData = {sender: userId, reciever: connections, type: 'post'}
+    const notificationData = {sender: post.userId, reciever: connections, type: 'post'}
+    // console.log(notificationData)
     const postNotification = await axios.post(`${process.env.NOTIFICATIONS_URL}/notifyPost`, notificationData)
-    console.log(postNotification)
+    // console.log(postNotification.data)
+
     return post;
   } catch (err) {
     console.log(err);
@@ -59,7 +79,7 @@ exports.getAllPost = async (req) => {
         .sort({ createdAt: -1 })
         .limit(2)
         .exec();
-      console.log(posts);
+      // console.log(posts);
       return posts;
     }
   } catch (err) {
@@ -97,7 +117,7 @@ exports.updatePost = async (req) => {
         { title, body },
         { new: true }
       );
-      console.log(updated);
+      // console.log(updated);
       return updated;
     } else {
       return 401;

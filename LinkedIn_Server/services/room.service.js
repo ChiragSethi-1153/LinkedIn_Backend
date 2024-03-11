@@ -6,9 +6,9 @@ exports.createRoom =  async (req) => {
     try{
         
         const participants = req.body
-        console.log(participants)
+        // console.log(participants)
         const existingRoom = await Room.findOne({participants}).populate("participants", "name headline")
-        console.log(existingRoom)
+        // console.log(existingRoom)
         if(existingRoom){
             return existingRoom
         }

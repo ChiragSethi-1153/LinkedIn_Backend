@@ -1,10 +1,9 @@
 const Connections = require("../models/connections")
 const Users = require("../models/users")
-
+const axios = require('axios')
 
 exports.newConnection = async (req) => {
     try{ 
-        console.log(req.body)
         const userId = req.id
         const {Id} = req.body
         // const {status} = req.body
@@ -14,12 +13,19 @@ exports.newConnection = async (req) => {
             return currStatus
         }
         else{ 
-            const connect =  new Connections({
+            const connect = await new Connections({
                 connectionBy: userId,
                 connectionTo: Id,
-            })
+            }).populate('connectionBy', 'name headline')
             console.log(connect)
             await connect.save()
+
+            const notificationData = {sender: connect.connectionBy, reciever: connect.connectionTo, type: 'connection'}
+            console.log(notificationData)
+    
+            const commentNotification = await axios.post(`${process.env.NOTIFICATIONS_URL}/notification`, notificationData)
+            console.log(commentNotification.data)
+
             return connect
         }
 
@@ -39,7 +45,7 @@ exports.getConnectionTo = async (req) => {
         .populate('connectionBy', "name company headline")
         
         if(pending.length === 0){
-            console.log(pending)
+            // console.log(pending)
             return 204
         }
         else{
@@ -63,7 +69,7 @@ exports.getConnectionBy = async (req) => {
             return 204
         }
         else{
-            console.log(pending)
+            // console.log(pending)
             return pending
         }
     }catch(err){
@@ -119,7 +125,7 @@ exports.getSuggestions = async (req) => {
         const users = response.map((i) => i.connectionBy == userId ? i.connectionTo : i.connectionBy)
         
         users.push(userId)
-        console.log(users)
+        // console.log(users)
         const suggestions = await Users.find({_id: {$nin: users}}, "-password")
         if(!suggestions){
             return 404

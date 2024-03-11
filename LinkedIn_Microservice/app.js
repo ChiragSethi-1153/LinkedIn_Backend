@@ -14,11 +14,12 @@ catch(err){
 
 const express = require('express')
 const cors = require('cors')
+const { ioController } = require('./config/io.controller')
 const app = express()
 const http = require('http').createServer(app)
 
 
-require('./config/io.controller')(http)
+ioController(http)
 require('./config/db')
 
 app.use(cors())

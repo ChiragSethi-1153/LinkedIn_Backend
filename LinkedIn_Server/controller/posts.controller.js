@@ -4,7 +4,7 @@ const {postsService} = require('../services')
 exports.createPosts = async (req, res) => {
     try{
     const response = await postsService.createPosts(req)
-    console.log(response)
+    // console.log(response)
     return res.status(201).json({message: 'Post Created Successfully', response})
     }
     catch(err){

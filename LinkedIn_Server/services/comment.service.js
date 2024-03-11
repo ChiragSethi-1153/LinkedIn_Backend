@@ -1,4 +1,6 @@
 const {Comments} = require('../models/comments')
+const axios = require('axios');
+const { Posts } = require('../models/posts')
 
 
 exports.postComment = async (req) => {
@@ -13,7 +15,21 @@ exports.postComment = async (req) => {
             body,
         })
         await comment.save()
-        const comm = comment.populate("userId", "name")
+        const comm = await comment.populate("userId", "name headline")
+        // console.log(comm)
+
+        const post = await Posts.find({_id: postId})
+        // console.log(post)
+
+        const reciever = post.map((i) => i?.userId)
+        // console.log(reciever)
+
+        const notificationData = {sender: comm.userId, reciever: reciever, type: 'comment'}
+        console.log(notificationData)
+
+        const commentNotification = await axios.post(`${process.env.NOTIFICATIONS_URL}/notification`, notificationData)
+        console.log(commentNotification.data)
+
         return comm
     } 
     catch(err){

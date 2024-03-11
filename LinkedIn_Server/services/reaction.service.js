@@ -1,4 +1,6 @@
+const { Posts } = require("../models/posts");
 const { Reactions } = require("../models/reactions");
+const axios= require('axios')
 
 exports.savePostReaction = async (req) => {
   try {
@@ -16,15 +18,32 @@ exports.savePostReaction = async (req) => {
         { emoji: emoji },
         { new: true }
       );
-      console.log(newReaction, "hbiu");
+      // console.log(newReaction, "hbiu");
       return newReaction;
     } else {
-      const reaction = new Reactions({
+      const reaction = await new Reactions({
         postId: postId,
         userId,
         emoji,
-      });
+      }).populate('userId', "name headline");
       await reaction.save();
+        console.log(reaction)
+
+        const post = await Posts.find({_id: postId})
+        // console.log(post)
+
+        const reciever = post.map((i) => i?.userId)
+        // console.log(reciever)
+
+        const notificationData = {sender: reaction.userId, reciever: reciever, type: 'reaction'}
+        console.log(notificationData)
+
+        const commentNotification = await axios.post(`${process.env.NOTIFICATIONS_URL}/notification`, notificationData)
+        console.log(commentNotification.data)
+
+
+
+
       return reaction;
     }
   } catch (err) {
@@ -42,9 +61,9 @@ exports.getPostReactions = async (req) => {
     const currReaction = await Reactions.find({
       $and: [{ postId: postId }, { userId: userId }],
     });
-    console.log(currReaction);
+    // console.log(currReaction);
     const reactions = { currReaction: currReaction, totalReactions };
-    console.log(reactions);
+    // console.log(reactions);
 
     return reactions;
   } catch (err) {
@@ -62,17 +81,17 @@ exports.saveCommentReaction = async (req) => {
     const existingReaction = await Reactions.findOne({
       $and: [{ userId: userId }, { commentId: commentId }],
     });
-    console.log(existingReaction?.emoji);
+    // console.log(existingReaction?.emoji);
 
     if (existingReaction) {
       const newReaction = await Reactions.updateOne(
         { $and: [{ userId: userId }, { commentId: commentId }] },
         { emoji: emoji }
       );
-      console.log(newReaction);
+      // console.log(newReaction);
       return newReaction;
     } else {
-      const reaction = new Reactions({
+      const reaction = await new Reactions({
         commentId: commentId,
         userId,
         emoji,

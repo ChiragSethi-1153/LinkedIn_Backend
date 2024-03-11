@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 // const Users = require('../../LinkedIn_Server/models/users')
 
 const notificationSchema = new mongoose.Schema({
-    reciever: {
-        type: mongoose.Schema.Types.ObjectId
-    },
+    reciever: [{
+        type: Object
+    }],
     sender: {
-        type: mongoose.Schema.Types.ObjectId
+        type: Object
     },
     content: {
         type: String
