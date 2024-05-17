@@ -44,7 +44,11 @@ exports.login = async (req, res) => {
         if(!isPasswordCorrect) {
             return 400
         }
-        return existingUser
+        if(existingUser && isPasswordCorrect){
+            const userData = await Users.findOne({email: existingUser.email}, "-password")
+            return userData
+        }
+        
     } catch(err){
         return new Error(err);
     }
