@@ -77,7 +77,6 @@ exports.getAllPost = async (req) => {
       const posts = await Posts.find()
         .populate("userId", "name headline company")
         .sort({ createdAt: -1 })
-        .limit(2)
         .exec();
       // console.log(posts);
       return posts;
@@ -94,8 +93,7 @@ exports.getPost = async (req) => {
     const { userId } = req.body;
 
     const post = Posts.find({ userId: userId })
-      .sort({ createdAt: -1 })
-      .limit(10);
+      .sort({ createdAt: -1 });
     return post;
   } catch (err) {
     console.log(err);

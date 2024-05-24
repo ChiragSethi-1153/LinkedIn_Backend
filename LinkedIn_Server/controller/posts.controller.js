@@ -28,7 +28,7 @@ exports.getPost = async (req, res) => {
     try{
         const response = await postsService.getPost(req)
         if(response === null) {
-            return res.status(204).json({message: 'No Post Found'})
+            return res.status(404).json({message: 'No Post Found'})
         }
         else{
             return res.status(200).json(response)
